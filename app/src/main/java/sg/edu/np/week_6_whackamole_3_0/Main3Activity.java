@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class Main3Activity extends AppCompatActivity {
     /* Hint:
         1. This displays the available levels from 1 to 10 to the user.
@@ -28,16 +30,41 @@ public class Main3Activity extends AppCompatActivity {
     private static final String FILENAME = "Main3Activity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        Log.v(TAG, "DEBUG3");
+        Button backbutton = findViewById(R.id.backbutton);
         /* Hint:
         This method receives the username account data and looks up the database for find the
         corresponding information to display in the recyclerView for the level selections page.
 
         Log.v(TAG, FILENAME + ": Show level for User: "+ userName);
          */
+        Intent receivingEnd = getIntent();
+        String receivedname = receivingEnd.getStringExtra("enteredname");
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        UserData temp = new UserData();
+        temp = dbHandler.findUser(receivedname);
+        dbHandler.close();
+
+
+        RecyclerView picklevels = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager recyclerviewlayout = new LinearLayoutManager(this);
+        picklevels.setLayoutManager(recyclerviewlayout);
+        CustomScoreAdaptor searchadapter  = new CustomScoreAdaptor(temp);
+        picklevels.setAdapter(searchadapter);
+
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activityName = new Intent(Main3Activity.this,MainActivity.class);
+                startActivity(activityName);
+            }
+        });
     }
 
     @Override

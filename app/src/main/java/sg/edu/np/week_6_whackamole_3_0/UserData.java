@@ -1,5 +1,8 @@
 package sg.edu.np.week_6_whackamole_3_0;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 public class UserData {
@@ -32,6 +35,8 @@ public class UserData {
         this.Scores = myScores;
     }
 
+
+
     public ArrayList<Integer> getLevels() {
         return this.Levels;
     }
@@ -63,4 +68,6 @@ public class UserData {
     public void setMyPassword(String myPassword) {
         this.MyPassword = myPassword;
     }
+
+
 }

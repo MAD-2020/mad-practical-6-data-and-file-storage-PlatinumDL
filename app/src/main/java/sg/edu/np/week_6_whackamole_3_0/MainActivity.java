@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,9 +37,36 @@ public class MainActivity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": Logging in with: " + etUsername.getText().toString() + ": " + etPassword.getText().toString());
             Log.v(TAG, FILENAME + ": Valid User! Logging in");
             Log.v(TAG, FILENAME + ": Invalid user!");
-
         */
+        final EditText username = findViewById(R.id.editname);
+        final EditText password = findViewById(R.id.editpassword);
+        final Button login = findViewById(R.id.loginbutton);
+        TextView register = findViewById(R.id.newactivityview);
 
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, FILENAME + ": Create new user!");
+                Intent activityName = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(activityName);
+            }
+        });
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String enteredname = username.getText().toString();
+                String enteredpassword = password.getText().toString();
+                if (isValidUser(enteredname, enteredpassword)) {
+                    Intent activityName = new Intent(MainActivity.this, Main3Activity.class);
+                    activityName.putExtra("enteredname", enteredname);
+                    startActivity(activityName);
+                }
+                else {
+                    Toast.makeText(login.getContext(), "Invalid Username or Password", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -54,6 +82,21 @@ public class MainActivity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": Running Checks..." + dbData.getMyUserName() + ": " + dbData.getMyPassword() +" <--> "+ userName + " " + password);
             You may choose to use this or modify to suit your design.
          */
+        UserData temp = new UserData();
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        temp = dbHandler.findUser(userName);
+        dbHandler.close();
+        if (temp == null) {
+            return false;
+        }
+        if (temp.getMyPassword().equals(password)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+
 
     }
 

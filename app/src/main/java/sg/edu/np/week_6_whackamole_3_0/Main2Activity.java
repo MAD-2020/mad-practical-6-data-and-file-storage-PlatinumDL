@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -43,10 +44,67 @@ public class Main2Activity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": User already exist during new user creation!");
 
          */
+        final EditText username = findViewById(R.id.editname2);
+        final EditText password = findViewById(R.id.editpassword2);
+        Button cancel = findViewById(R.id.cancelbutton);
+        final Button create = findViewById(R.id.createbutton);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activityName = new Intent(Main2Activity.this, MainActivity.class);
+                startActivity(activityName);
+            }
+        });
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username2 = username.getText().toString();
+                String password2 = password.getText().toString();
+                ArrayList<Integer> levellist = new ArrayList<Integer>(10);
+                ArrayList<Integer> scorelist = new ArrayList<Integer>(10);
+
+                for (int i = 0; i <10; i++) {
+                    levellist.add(i+1);
+                    scorelist.add(0);
+                }
+
+                if (ifUserExist(username2)){
+                    UserData newuser = new UserData(username2,password2,levellist,scorelist);
+                    MyDBHandler dbHandler = new MyDBHandler(Main2Activity.this, null, null, 1);
+                    dbHandler.addUser(newuser);
+                    dbHandler.close();
+                    Log.v(TAG, FILENAME + ": New user created successfully!");
+                    Toast.makeText(create.getContext(), "User created successfully!", Toast.LENGTH_SHORT).show();
+                    Intent activityName = new Intent(Main2Activity.this,MainActivity.class);
+                    Log.v(TAG, "DEBUG2");
+                    startActivity(activityName);
+                }
+
+                else{
+                    Log.v(TAG, FILENAME + ": User already exist during new user creation!");
+                }
+
+            }
+        });
     }
 
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+    public boolean ifUserExist(String userName){
+        UserData temp = null;
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        temp = dbHandler.findUser(userName);
+        dbHandler.close();
+        if (temp == null) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -42,6 +42,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         User B   | YYY      | 2     |    0
 
      */
+    private static final String DATABASE_NAME = "WhackAMole.db";
+    public static final String TABLE_USERS = "Users";
+    public static final String COLUMN_USERNAME = "Username";
+    public static final String COLUMN_PASSWORD = "Password";
+    public static final String COLUMN_LEVEL = "Level";
+    public static final String COLUMN_SCORE = "Score";
+
 
     private static final String FILENAME = "MyDBHandler.java";
     private static final String TAG = "Whack-A-Mole3.0!";
@@ -51,6 +58,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         /* HINT:
             This is used to init the database.
          */
+        super(context, DATABASE_NAME, factory, version);
+
     }
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -59,6 +68,15 @@ public class MyDBHandler extends SQLiteOpenHelper {
             This is triggered on DB creation.
             Log.v(TAG, "DB Created: " + CREATE_ACCOUNTS_TABLE);
          */
+        Log.v(TAG, "DB Created: " + DATABASE_NAME);
+        String CREATE_USERS_TABLE = "CREATE TABLE " + "'"+TABLE_USERS+"'" +
+                "("+
+                COLUMN_USERNAME + " TEXT, "+
+                COLUMN_PASSWORD + " TEXT," +
+                COLUMN_LEVEL + " INTEGER," +
+                COLUMN_SCORE + " INTEGER" +
+                ")";
+        db.execSQL(CREATE_USERS_TABLE);
 
     }
     @Override
@@ -67,6 +85,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         /* HINT:
             This is triggered if there is a new version found. ALL DATA are replaced and irreversible.
          */
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db);
+
     }
 
     public void addUser(UserData userData)
@@ -75,6 +96,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 This adds the user to the database based on the information given.
                 Log.v(TAG, FILENAME + ": Adding data for Database: " + values.toString());
              */
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (int level : userData.getLevels()) {
+            values.put(COLUMN_USERNAME, userData.getMyUserName());
+            values.put(COLUMN_PASSWORD, userData.getMyPassword());
+            values.put(COLUMN_LEVEL, level);
+            values.put(COLUMN_SCORE, 0);
+            db.insert(TABLE_USERS, null, values);
+        }
+
+        db.close();
     }
 
     public UserData findUser(String username)
@@ -99,6 +132,33 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 Log.v(TAG, FILENAME+ ": No data found!");
             }
          */
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE "
+                + COLUMN_USERNAME
+                + " = \"" + username + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        UserData user = new UserData();
+        ArrayList<Integer> levellist = new ArrayList<Integer>();
+        ArrayList<Integer> scorelist = new ArrayList<Integer>();
+
+        if (cursor.moveToFirst() && cursor.getCount() >= 1) {
+            do{
+                user.setMyUserName(cursor.getString(0));
+                user.setMyPassword(cursor.getString(1));
+                levellist.add(Integer.parseInt(cursor.getString(2)));
+                scorelist.add(Integer.parseInt(cursor.getString(3)));
+            } while (cursor.moveToNext());
+        }
+        else {
+            return null;
+        }
+
+        user.setLevels(levellist);
+        user.setScores(scorelist);
+        cursor.close();
+        return user;
+
     }
 
     public boolean deleteAccount(String username) {
@@ -107,6 +167,28 @@ public class MyDBHandler extends SQLiteOpenHelper {
             This is not reversible.
             Log.v(TAG, FILENAME + ": Database delete user: " + query);
          */
-
+        boolean result = false;
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE "
+                + COLUMN_USERNAME
+                + " = \"" + username + "\"";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst() && cursor.getCount() >= 1) {
+            do{
+                db.delete(TABLE_USERS, COLUMN_USERNAME + " = ?",
+                        new String[] { String.valueOf(username) });
+            } while (cursor.moveToNext());
+            result = true;
+        }
+        return result;
     }
+
+    public void updateScore(String username, int level, int score){
+        UserData user = findUser(username);
+        if (user.getScores().get(level-1) < score) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("UPDATE "+TABLE_USERS+" SET score = "+Integer.toString(score) + " WHERE Username = "+"'"+username+"'"+" AND Level = "+Integer.toString(level));
+        }
+    }
+
 }
