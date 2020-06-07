@@ -187,7 +187,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         UserData user = findUser(username);
         if (user.getScores().get(level-1) < score) {
             SQLiteDatabase db = this.getWritableDatabase();
-            db.execSQL("UPDATE "+TABLE_USERS+" SET score = "+Integer.toString(score) + " WHERE Username = "+"'"+username+"'"+" AND Level = "+Integer.toString(level));
+            db.execSQL("UPDATE "+TABLE_USERS+" SET score = "+Integer.toString(score) + " WHERE Username = "+"'"+username+"'"+" AND Level = "+Integer.toString(level-1));
         }
     }
 

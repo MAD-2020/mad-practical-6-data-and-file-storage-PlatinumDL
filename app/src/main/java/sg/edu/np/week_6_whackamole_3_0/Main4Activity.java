@@ -55,11 +55,10 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
             belongs here.
             This timer countdown from 10 seconds to 0 seconds and stops after "GO!" is shown.
          */
-        myCountDown = new CountDownTimer(timeleft, 1000){
-            public void onTick(long l){
-                timeleft = l;
-                Toast.makeText(getApplicationContext(),"Get Ready In "+String.valueOf(timeleft/1000)+" seconds",Toast.LENGTH_SHORT).show();
-                Log.v(TAG, "Ready CountDown!" + timeleft/ 1000);
+        myCountDown = new CountDownTimer(10000, 1000){
+            public void onTick(long millisUntilFinished){
+                Toast.makeText(getApplicationContext(),"Get Ready In "+String.valueOf(millisUntilFinished/1000)+" seconds",Toast.LENGTH_SHORT).show();
+                Log.v(TAG, "Ready CountDown!" + millisUntilFinished/ 1000);
 
             }
 
@@ -82,8 +81,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         if (levelchosen == 10){
             myCountDown=new CountDownTimer(1000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -99,8 +97,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 9){
             myCountDown=new CountDownTimer(2000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -116,8 +113,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 8){
             myCountDown=new CountDownTimer(3000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -133,8 +129,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 7){
             myCountDown=new CountDownTimer(4000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -150,8 +145,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 6){
             myCountDown=new CountDownTimer(5000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -167,8 +161,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 5){
             myCountDown=new CountDownTimer(6000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -184,8 +177,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 4){
             myCountDown=new CountDownTimer(7000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -201,8 +193,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 3){
             myCountDown=new CountDownTimer(8000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -217,8 +208,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 2){
             myCountDown=new CountDownTimer(9000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
@@ -233,8 +223,7 @@ public class Main4Activity extends AppCompatActivity implements View.OnClickList
         else if (levelchosen == 1){
             myCountDown=new CountDownTimer(10000,1000) {
                 @Override
-                public void onTick(long l) {
-                    Long RemainingTime=l/1000;
+                public void onTick(long millisUntilFinished) {
                     Log.v(TAG, "New Mole Location!");
                     setNewMole(levelchosen);
                 }
